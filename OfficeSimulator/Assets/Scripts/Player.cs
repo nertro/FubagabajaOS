@@ -4,33 +4,24 @@ using System.Collections;
 public class Player : MonoBehaviour {
 
     private int reputation;
-    private int mood;
+    private float mood;
     [SerializeField]
     private int moodtweak; //for workspeed calculation
     private float task;
     private bool doingTask;
     private bool watchingCats;
+    [SerializeField]
+    private float catImpact;
 
 	// Use this for initialization
 	void Start () {
 	
 	}
 	
-	// Update is called once per frame
-    void Update()
-    {
-        if (doingTask)
-        {
-            DoTask();
-        }
-        else if (watchingCats)
-        {
-            
-        }
-    }
-
     private void DoTask()
     {
+        watchingCats = false;
+
         if (task < 100)
         {
             float workspeed = (mood / moodtweak) * Time.deltaTime;
@@ -39,4 +30,12 @@ public class Player : MonoBehaviour {
         }
     }
 
+
+    private void WatchingCats()
+    {
+        doingTask = false;
+
+        mood += catImpact * Time.deltaTime;
+        Mathf.Clamp(mood, 0, 100);
+    }
 }
