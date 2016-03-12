@@ -3,39 +3,47 @@ using System.Collections;
 
 public class Player : MonoBehaviour {
 
-    private int reputation;
     private float mood;
     [SerializeField]
     private int moodtweak; //for workspeed calculation
     private float task;
-    private bool doingTask;
-    private bool watchingCats;
     [SerializeField]
     private float catImpact;
 
-	// Use this for initialization
-	void Start () {
+    private bool doingTask;
+    private bool watchingCats;
+
+    public float Mood { get { return this.mood; } }
+    public float Reputation { get; set; }
 	
-	}
-	
-    private void DoTask()
+     public void DoTask()
     {
+        if (!doingTask)
+            return;
+
         watchingCats = false;
 
         if (task < 100)
         {
-            float workspeed = (mood / moodtweak) * Time.deltaTime;
+            float workspeed = mood / moodtweak;
             task += workspeed;
             Mathf.Clamp(task, 0, 100);
         }
+
+        Invoke("DoTask", 1);
     }
 
 
-    private void WatchingCats()
+    public void WatchingCats()
     {
+        if (!watchingCats)
+            return;
+
         doingTask = false;
 
-        mood += catImpact * Time.deltaTime;
+        mood += catImpact;
         Mathf.Clamp(mood, 0, 100);
+
+        Invoke("WatchingCats", 1);
     }
 }
