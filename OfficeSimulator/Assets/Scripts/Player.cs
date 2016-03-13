@@ -16,7 +16,7 @@ public class Player : MonoBehaviour {
     public float Mood { get { return this.mood; } }
     public float Reputation { get; set; }
 	
-     public void DoTask()
+     private void DoTask()
     {
         if (!doingTask)
             return;
@@ -33,8 +33,13 @@ public class Player : MonoBehaviour {
         Invoke("DoTask", 1);
     }
 
+     public void StartTask()
+     {
+         doingTask = true;
+         DoTask();
+     }
 
-    public void WatchingCats()
+    private void WatchingCats()
     {
         if (!watchingCats)
             return;
@@ -45,5 +50,11 @@ public class Player : MonoBehaviour {
         Mathf.Clamp(mood, 0, 100);
 
         Invoke("WatchingCats", 1);
+    }
+
+    public void StartWatchingCats()
+    {
+        watchingCats = true;
+        WatchingCats();
     }
 }
