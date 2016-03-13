@@ -2,11 +2,11 @@
 using System;
 
 public class CustomEventArgs : EventArgs {
-    public float value;
-    public string message;
+    public float Value;
+    public string Message;
 
     public CustomEventArgs(float value)
     {
-        this.value = value;
+        this.Value = value;
     }
 }

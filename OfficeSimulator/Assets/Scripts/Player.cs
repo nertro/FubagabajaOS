@@ -21,6 +21,7 @@ public class Player : MonoBehaviour {
     void Start()
     {
         GameCtrl.DialogueEvent += OnDialogue;
+        //answer Event with cost here
     }
 
     private void OnDialogue(object sender, CustomEventArgs e)

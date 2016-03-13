@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
@@ -15,8 +16,12 @@ public class DialogCtrl : MonoBehaviour {
     private Text dialogueText;
     [SerializeField]
     private Button[] answers;
+    [SerializeField]
+    private Text[] answerTexts;
 
     private const float MaxChanceTweak = 20f; //tweak value for low or high confrontation calculation
+
+    public event EventHandler<CustomEventArgs> AnswerEvent;
 
     void Awake()
     {
@@ -27,6 +32,7 @@ public class DialogCtrl : MonoBehaviour {
     void Start()
     {
         GameCtrl.DialogueEvent += OnDialogue;
+        this.gameObject.SetActive(false);
     }
 	
 	// Update is called once per frame
@@ -36,7 +42,26 @@ public class DialogCtrl : MonoBehaviour {
 
     private void OnDialogue(object sender, CustomEventArgs e)
     {
-        Confrontation confrontation = ChooseConfrontation(e.value);
+        Confrontation confrontation = ChooseConfrontation(e.Value);
+        string[] answerKeys = confrontation.Answers.Keys.ToArray();
+
+        dialogueText.text = confrontation.Question;
+
+        for (int i = 0; i < confrontation.Answers.Count; i++)
+        {
+            answers[i].gameObject.SetActive(true);
+            answers[i].onClick.AddListener(delegate () { OnAnswer(confrontation.Answers[answerKeys[i]]); });
+
+            answerTexts[i].text = answerKeys[i];
+        }
+    }
+
+    private void OnAnswer(float cost)
+    {
+        if (AnswerEvent == null)
+            return;
+
+        AnswerEvent(this, new CustomEventArgs(cost));
     }
 
     private Confrontation ChooseConfrontation(float reputation)
