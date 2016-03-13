@@ -9,12 +9,14 @@ using System.IO;
 public class DialogCtrl : MonoBehaviour {
 
     private List<Confrontation> lowConfrontations;
-    private List<Confrontation> highConfrontation;
+    private List<Confrontation> highConfrontations;
 
     [SerializeField]
     private Text dialogueText;
     [SerializeField]
     private Button[] answers;
+
+    private const float MaxChanceTweak = 20f; //tweak value for low or high confrontation calculation
 
     void Awake()
     {
@@ -34,13 +36,30 @@ public class DialogCtrl : MonoBehaviour {
 
     private void OnDialogue(object sender, CustomEventArgs e)
     {
-
+        Confrontation confrontation = ChooseConfrontation(e.value);
     }
 
-    private void ChooseConfrontation(float reputation)
+    private Confrontation ChooseConfrontation(float reputation)
     {
-        float chance = 100 - reputation;
+        //100 for 100 percent
+        float chance = 100 - reputation + MaxChanceTweak;
         chance /= 100;
+
+        //tweak maxChanceRandom to determine how often there will be highConfrontations
+        float rand = UnityEngine.Random.Range(0, 1);
+
+        if (rand > chance)
+        {
+            int index = UnityEngine.Random.Range(0, lowConfrontations.Count - 1);
+
+            return lowConfrontations[index];
+        }
+        else
+        {
+            int index = UnityEngine.Random.Range(0, highConfrontations.Count - 1);
+
+            return lowConfrontations[index];
+        }
     }
 
     private void LoadConfrontations()
