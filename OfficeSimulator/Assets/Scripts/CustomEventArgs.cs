@@ -1,15 +1,12 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System;
 
-public class CustomEventArgs : MonoBehaviour {
+public class CustomEventArgs : EventArgs {
+    public float value;
+    public string message;
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public CustomEventArgs(float value)
+    {
+        this.value = value;
+    }
 }

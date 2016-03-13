@@ -5,8 +5,10 @@ using System.Collections;
 public class GameCtrl : MonoBehaviour {
     [SerializeField]
     private DialogCtrl dialogCtrl;
+    [SerializeField]
+    private Player player;
 
-    public static event EventHandler DialogueEvent;
+    public static event EventHandler<CustomEventArgs> DialogueEvent;
 
 	void Start () {
         dialogCtrl.gameObject.SetActive(false);
@@ -21,6 +23,6 @@ public class GameCtrl : MonoBehaviour {
         if (DialogueEvent == null)
             return;
 
-        DialogueEvent(this, new EventArgs());
+        DialogueEvent(this, new CustomEventArgs(player.Reputation));
     }
 }

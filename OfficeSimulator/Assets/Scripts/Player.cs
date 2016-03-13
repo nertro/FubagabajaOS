@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 public class Player : MonoBehaviour {
@@ -16,7 +17,18 @@ public class Player : MonoBehaviour {
 
     public float Mood { get { return this.mood; } }
     public float Reputation { get; set; }
-	
+
+    void Start()
+    {
+        GameCtrl.DialogueEvent += OnDialogue;
+    }
+
+    private void OnDialogue(object sender, CustomEventArgs e)
+    {
+        watchingCats = false;
+        doingTask = false;
+    }
+
      private void DoTask()
     {
         if (!doingTask)
