@@ -9,6 +9,7 @@ public class Player : MonoBehaviour {
     private float task;
     [SerializeField]
     private float catImpact;
+    private float estimatedTaskTime; //in seconds/units
 
     private bool doingTask;
     private bool watchingCats;
@@ -27,7 +28,10 @@ public class Player : MonoBehaviour {
         {
             float workspeed = mood / moodtweak;
             task += workspeed;
-            Mathf.Clamp(task, 0, 100);
+            task = Mathf.Clamp(task, 0, 100);
+
+            if (workspeed > 0)
+                estimatedTaskTime = (100 - task) / workspeed;
         }
 
         Invoke("DoTask", 1);
@@ -47,7 +51,7 @@ public class Player : MonoBehaviour {
         doingTask = false;
 
         mood += catImpact;
-        Mathf.Clamp(mood, 0, 100);
+        mood = Mathf.Clamp(mood, 0, 100);
 
         Invoke("WatchingCats", 1);
     }
